@@ -419,46 +419,5 @@
                 </pluginManagement>
              </build>
         </profile>
-        <profile>
-            <id>liberty</id>
-            <activation>
-                <property>
-                    <name>libertyEnv</name>
-                    <value>!microclimate</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Default enablement of liberty-maven plugin -->
-            <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <configuration>
-                    <assemblyArtifact>
-                        <groupId>com.ibm.websphere.appserver.runtime</groupId>
-                        <artifactId>wlp-webProfile8</artifactId>
-                        <version>19.0.0.10</version>
-                        <type>zip</type>
-                    </assemblyArtifact>
-                    <configDirectory>${basedir}/src/main/liberty/config</configDirectory>
-                    <packageFile>${package.file}</packageFile>
-                    <include>${packaging.type}</include>
-                    <bootstrapProperties>
-                        <app.location>${project.artifactId}-${project.version}.war</app.location>
-                        <default.http.port>${testServerHttpPort}</default.http.port>
-                        <default.https.port>${testServerHttpsPort}</default.https.port>
-                        <test.mongo.database>${testMongoDatabase}</test.mongo.database>
-                        <test.mongo.collection>${testMongoCollection}</test.mongo.collection>
-                        <test.mongo.port>${testMongoPort}</test.mongo.port>
-                    </bootstrapProperties>
-                    <features>
-                        <acceptLicense>true</acceptLicense>
-                    </features>
-                    <looseApplication>false</looseApplication>
-                </configuration>
-            </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 </project>
