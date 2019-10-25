@@ -12,14 +12,16 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-# FROM websphere-liberty:microProfile3
-FROM openliberty/open-liberty:microProfile3-ubi-min
-LABEL maintainer="IBM Java Engineering at IBM Cloud"
+FROM ibmcom/websphere-liberty:kernel-ubi-min
+USER root
 
-COPY --chown=1001:0 src/main/liberty/config /config/
-COPY --chown=1001:0 target/tradehistory-1.0-SNAPSHOT.war /config/apps/trade-history.war
+ARG SSL=false
+ARG MP_MONITORING=false
+ARG HTTP_ENDPOINT=false
 
-# COPY --chown=1001:0 /target/liberty/wlp/usr/servers/defaultServer /config/
-# COPY --chown=1001:0 /target/liberty/wlp/usr/servers/defaultServer/resources/security/certs.jks output/resources/security/
+COPY ./src/main/liberty/config /config/
+COPY ./target/tradehistory-1.0-SNAPSHOT.war /config/apps/trade-history.war
+RUN chown -R 1001.0 /config /opt/ibm/wlp/usr/servers/defaultServer /opt/ibm/wlp/usr/shared/resources && chmod -R g+rw /config /opt/ibm/wlp/usr/servers/defaultServer  /opt/ibm/wlp/usr/shared/resources
 
+USER 1001
 RUN configure.sh
