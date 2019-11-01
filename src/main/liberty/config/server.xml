@@ -17,6 +17,10 @@
       <feature>monitor-1.0</feature>
       <feature>jndi-1.0</feature>
       <feature>websocket-1.1</feature>
+      <feature>jwt-1.0</feature>
+      <feature>mpJwt-1.1</feature>
+      <feature>mpMetrics-1.1</feature>
+      <feature>jwtSso-1.0</feature>
   </featureManager>
 
   <logging consoleLogLevel="INFO" traceSpecification="*=info"/>
