@@ -56,6 +56,7 @@ import io.swagger.annotations.Api;
 )
 public class Trades {
 
+	private static Logger logger = Logger.getLogger(Trades.class.getName());
     public static MongoConnector mConnector;
 
     @PostConstruct
@@ -64,13 +65,13 @@ public class Trades {
             MongoConnector mConnector = new MongoConnector();
         }
         catch( NullPointerException e) {
-            System.out.println(e.getMessage());
+            logException(e);
         }
         catch(IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            logException(e);
         }
         catch(Exception e) {
-            System.out.println(e.getMessage());
+            logException(e);
         }
     }
 
@@ -243,7 +244,19 @@ public class Trades {
         @Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName, 
         @Parameter(description="Current portfolio value", required = true) @QueryParam("currentValue") Double portfolioValue) {
 
+        logger.info("Getting ROI for "+ownerName+" from Mongo DB");
         return mConnector.getROI(ownerName, portfolioValue).toString();
 
     }
+    
+	private static void logException(Throwable t) {
+		logger.warning(t.getClass().getName()+": "+t.getMessage());
+
+		//only log the stack trace if the level has been set to at least the specified level
+		if (logger.isLoggable(Level.INFO)) {
+			StringWriter writer = new StringWriter();
+			t.printStackTrace(new PrintWriter(writer));
+			logger.info(writer.toString());
+		}
+	}    
 }
