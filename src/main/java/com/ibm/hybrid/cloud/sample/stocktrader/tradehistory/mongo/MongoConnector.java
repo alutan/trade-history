@@ -31,6 +31,10 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Set;
 
+//Logging (JSR 47)
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.net.MalformedURLException;
@@ -80,11 +84,13 @@ public class MongoConnector {
             try {
                 mongoClient.getAddress();
             } catch (Exception e) {
+                logException(e);
                 mongoClient.close();
                 throw e;
             }
             database = mongoClient.getDatabase( MONGO_DATABASE );      
         } catch(NullPointerException e){
+            logException(e);
             throw e;
         } 
 
@@ -232,8 +238,7 @@ public class MongoConnector {
         try {
             quote = stockQuoteClient.getStockQuote(jwt, symbol);
         } catch (Exception e) {
-            System.out.println("Error in " + this.getClass().getName());
-            System.out.println(e);
+            logException(e);
         }
         Double price = quote.getPrice();
         return price;
@@ -280,6 +285,7 @@ public class MongoConnector {
         Double roi = profits/notional * 100;
         //TODO: handle NaN and throw exception or null value
 
+        logger.info("Getting ROI for "+ownerName+" from Mongo DB");
         return String.format("%.2f", roi);
     }
 
@@ -299,5 +305,16 @@ public class MongoConnector {
 
         json.put(label, jsonArray);
         return json;
-    }    
+    }
+    
+ 	private static void logException(Throwable t) {
+		logger.warning(t.getClass().getName()+": "+t.getMessage());
+
+		//only log the stack trace if the level has been set to at least the specified level
+		if (logger.isLoggable(Level.INFO)) {
+			StringWriter writer = new StringWriter();
+			t.printStackTrace(new PrintWriter(writer));
+			logger.info(writer.toString());
+		}
+	}       
 }
