@@ -70,6 +70,7 @@ public class MongoConnector {
     public MongoCollection<Document> tradesCollection;
     public static final String TRADE_COLLECTION_NAME = "test_collection";
 
+	private static Logger logger = Logger.getLogger(MongoConnector.class.getName());
     
     @Inject 
     @RestClient  
