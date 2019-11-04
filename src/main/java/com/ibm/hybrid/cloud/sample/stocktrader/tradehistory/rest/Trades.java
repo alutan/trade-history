@@ -12,6 +12,10 @@
  */
 package com.ibm.hybrid.cloud.sample.stocktrader.tradehistory.rest;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 //Logging (JSR 47)
 import java.util.logging.Level;
 import java.util.logging.Logger;
