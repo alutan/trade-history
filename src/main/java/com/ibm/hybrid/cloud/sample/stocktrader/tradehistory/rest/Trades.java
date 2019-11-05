@@ -67,10 +67,16 @@ public class Trades {
 	private static Logger logger = Logger.getLogger(Trades.class.getName());
     public static MongoConnector mConnector;
 
+    public static MongoConnector getMongoConnector() {
+            if (mConnector == null)
+                initialize();
+            return mConnector;
+    }
+    
     @PostConstruct
     public void initialize(){
         try {
-            MongoConnector mConnector = new MongoConnector();
+            mConnector = new MongoConnector();
         }
         catch( NullPointerException e) {
             logException(e);
@@ -104,7 +110,7 @@ public class Trades {
     )
     public String latestBuy() {
         JSONObject json = new JSONObject();
-        MongoClient mClient = mConnector.mongoClient;
+        MongoClient mClient = getMongoConnector().mongoClient;
         
         long dbSize = mClient.getDatabase("test").getCollection("test_collection").count();
         int approxDbSize = Math.toIntExact(dbSize);
@@ -135,7 +141,7 @@ public class Trades {
         description = "Get an array of owner's transactions")
     public String getTradesByOwner(@Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName) {
     
-        return mConnector.getTrades(ownerName).toString();
+        return getMongoConnector().getTrades(ownerName).toString();
 
     }
 
@@ -160,7 +166,7 @@ public class Trades {
         @Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName, 
         @Parameter(description="Symbol name", required = true) @PathParam("symbol") String symbol) {
 
-        return mConnector.getTradesForSymbol(ownerName, symbol).toString();
+        return getMongoConnector().getTradesForSymbol(ownerName, symbol).toString();
 
     }
 
@@ -184,7 +190,7 @@ public class Trades {
         @Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName, 
         @Parameter(description="Symbol name", required = false) @PathParam("symbol") String symbol) {
 
-        return mConnector.getSymbolShares(ownerName, symbol).toString();
+        return getMongoConnector().getSymbolShares(ownerName, symbol).toString();
 
     }
 
@@ -206,7 +212,7 @@ public class Trades {
     @Operation(summary = "Get the number of shares of all owned stock by specified owner.")
     public String getPortfolioShares(@Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName) {
 
-        return mConnector.getPortfolioSharesJSON(ownerName).toString();
+        return getMongoConnector().getPortfolioSharesJSON(ownerName).toString();
 
     }
 
@@ -228,7 +234,7 @@ public class Trades {
     public String getNotional(
         @Parameter(description="Owner name", required = true) @PathParam("owner") String ownerName) {
 
-        return mConnector.getTotalNotional(ownerName).toString();
+        return getMongoConnector().getTotalNotional(ownerName).toString();
         
     }
 
@@ -253,7 +259,7 @@ public class Trades {
         @Parameter(description="Current portfolio value", required = true) @QueryParam("currentValue") Double portfolioValue) {
 
         logger.info("Getting ROI for "+ownerName+" from Mongo DB");
-        return mConnector.getROI(ownerName, portfolioValue).toString();
+        return getMongoConnector().getROI(ownerName, portfolioValue).toString();
 
     }
     
