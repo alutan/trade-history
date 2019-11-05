@@ -69,7 +69,7 @@ public class Trades {
 
     public static MongoConnector getMongoConnector() {
             if (mConnector == null)
-                initialize();
+                mConnector = new MongoConnector();
             return mConnector;
     }
     
