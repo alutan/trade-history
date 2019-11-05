@@ -285,6 +285,8 @@ public class MongoConnector {
      */
     public String getROI(String ownerName, Double equity) {
         
+        logger.info("Getting ROI for "+ownerName+" in Mongo Connector");
+        
         //handle NaN and null value
         Double notional = getTotalNotional(ownerName);
         if (notional == null)
@@ -303,7 +305,6 @@ public class MongoConnector {
         if (notional.doubleValue() != 0.0)
             roi = profits/notional * 100;
 
-        logger.info("Getting ROI for "+ownerName+" from Mongo DB: "+ roi);
         return String.format("%.2f", roi);
     }
 
