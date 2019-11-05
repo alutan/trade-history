@@ -78,6 +78,8 @@ public class MongoConnector {
 
     public MongoConnector() throws NullPointerException,IllegalArgumentException,MongoSocketException {
         //Mongo DB Connection
+
+        logger.info("Initializing Mongo Connector");
         initializeProperties();
         try{
             if(MONGO_IP == null || MONGO_PORT == 0 || MONGO_USER == null || MONGO_AUTH_DB == null || MONGO_PASSWORD == null || MONGO_DATABASE == null){
@@ -105,6 +107,7 @@ public class MongoConnector {
             database.createCollection(TRADE_COLLECTION_NAME);
             tradesCollection = database.getCollection(TRADE_COLLECTION_NAME);
         }
+        logger.info("Trades Collection: " + tradesCollection);
     }
 
     private void initializeProperties(){
@@ -190,6 +193,7 @@ public class MongoConnector {
                                                             .filter(Filters.eq("owner", ownerName));
         // JSONObject result = docsToJsonObject(docs, "notional");
         // return result;
+        logger.info("Total Notional docs: " + docs);
         return docs.first().getDouble("value");
     }
 
@@ -197,6 +201,7 @@ public class MongoConnector {
         MapReduceIterable<Document> docs = tradesCollection.mapReduce("function() { emit( this.owner, this.commission); }", 
                                                                     "function(key, values) { return Array.sum(values) }")
                                                         .filter(Filters.eq("owner", ownerName));
+        logger.info("Commission Total docs: " + docs);
         return docs.first().getDouble("value");
     }
 
