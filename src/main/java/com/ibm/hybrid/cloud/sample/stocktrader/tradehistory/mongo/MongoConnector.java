@@ -194,7 +194,10 @@ public class MongoConnector {
         // JSONObject result = docsToJsonObject(docs, "notional");
         // return result;
         logger.info("Total Notional docs: " + docs);
-        return docs.first().getDouble("value");
+        if ((docs != null) && (docs.first() != null))
+            return docs.first().getDouble("value");
+        else
+            return null;
     }
 
     public Double getCommissionTotal(String ownerName) {
@@ -202,7 +205,10 @@ public class MongoConnector {
                                                                     "function(key, values) { return Array.sum(values) }")
                                                         .filter(Filters.eq("owner", ownerName));
         logger.info("Commission Total docs: " + docs);
-        return docs.first().getDouble("value");
+        if ((docs != null) && (docs.first() != null))
+            return docs.first().getDouble("value");
+        else
+            return null;
     }
 
     public JSONObject getSymbolNotional(String ownerName, String symbol) {
