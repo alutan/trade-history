@@ -284,13 +284,26 @@ public class MongoConnector {
      * @return - String - percentage return 
      */
     public String getROI(String ownerName, Double equity) {
+        
+        //handle NaN and null value
         Double notional = getTotalNotional(ownerName);
+        if (notional == null)
+            notional = new Double(0.0);
         Double commissions = getCommissionTotal(ownerName);
-        Double profits = equity - notional - commissions;
-        Double roi = profits/notional * 100;
-        //TODO: handle NaN and throw exception or null value
+        if (commissions == null)
+            commissions = new Double(0.0);
+        
+        Double profits = new Double(0.0);
+        if (equity != null)
+            profits = equity - notional - commissions;
+        else
+            profits = new Double(0.0) - notional - commissions;
+        
+        Double roi = new Double(0.0);
+        if (notional.doubleValue() != 0.0)
+            roi = profits/notional * 100;
 
-        logger.info("Getting ROI for "+ownerName+" from Mongo DB");
+        logger.info("Getting ROI for "+ownerName+" from Mongo DB: "+ roi);
         return String.format("%.2f", roi);
     }
 
