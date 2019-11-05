@@ -197,9 +197,12 @@ public class MongoConnector {
         logger.info("Total Notional docs: " + docs);
         if (docs != null) {
             MongoCursor<Document> iterator = docs.iterator();
+            logger.info("iterator: " + iterator);
             if (iterator != null) {
-                if (iterator.hasNext())
-                return iterator.next().getDouble("value");
+                logger.info("iterator has next: " + iterator.hasNext());
+                if (iterator.hasNext()) {
+                    return iterator.next().getDouble("value");
+                }
             }
         }       
         return null;
@@ -212,11 +215,14 @@ public class MongoConnector {
         logger.info("Commission Total docs: " + docs);
         if (docs != null) {
             MongoCursor<Document> iterator = docs.iterator();
+            logger.info("iterator: " + iterator);
             if (iterator != null) {
-                if (iterator.hasNext())
-                return iterator.next().getDouble("value");
+                logger.info("iterator has next: " + iterator.hasNext());
+                if (iterator.hasNext()) {
+                    return iterator.next().getDouble("value");
+                }
             }
-        }       
+        }
         return null;
     }
 
