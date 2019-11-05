@@ -14,6 +14,7 @@ package com.ibm.hybrid.cloud.sample.stocktrader.tradehistory.mongo;
 
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.FindIterable;
@@ -194,10 +195,14 @@ public class MongoConnector {
         // JSONObject result = docsToJsonObject(docs, "notional");
         // return result;
         logger.info("Total Notional docs: " + docs);
-        if ((docs != null) && (docs.first() != null))
-            return docs.first().getDouble("value");
-        else
-            return null;
+        if (docs != null) {
+            MongoCursor<Document> iterator = docs.iterator();
+            if (iterator != null) {
+                if (iterator.hasNext())
+                return docs.next().getDouble("value");
+            }
+        }       
+        return null;
     }
 
     public Double getCommissionTotal(String ownerName) {
@@ -205,10 +210,14 @@ public class MongoConnector {
                                                                     "function(key, values) { return Array.sum(values) }")
                                                         .filter(Filters.eq("owner", ownerName));
         logger.info("Commission Total docs: " + docs);
-        if ((docs != null) && (docs.first() != null))
-            return docs.first().getDouble("value");
-        else
-            return null;
+        if (docs != null) {
+            MongoCursor<Document> iterator = docs.iterator();
+            if (iterator != null) {
+                if (iterator.hasNext())
+                return docs.next().getDouble("value");
+            }
+        }       
+        return null;
     }
 
     public JSONObject getSymbolNotional(String ownerName, String symbol) {
@@ -302,19 +311,23 @@ public class MongoConnector {
         Double notional = getTotalNotional(ownerName);
         if (notional == null)
             notional = new Double(0.0);
+        logger.info("Total Notional: " + notional);
         Double commissions = getCommissionTotal(ownerName);
         if (commissions == null)
             commissions = new Double(0.0);
+        logger.info("Commission Total: " + commissions);
         
         Double profits = new Double(0.0);
         if (equity != null)
             profits = equity - notional - commissions;
         else
             profits = new Double(0.0) - notional - commissions;
+        logger.info("Profits: " + profits);
         
         Double roi = new Double(0.0);
         if (notional.doubleValue() != 0.0)
             roi = profits/notional * 100;
+        logger.info("ROI: " + roi);
 
         return String.format("%.2f", roi);
     }
