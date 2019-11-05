@@ -199,7 +199,7 @@ public class MongoConnector {
             MongoCursor<Document> iterator = docs.iterator();
             if (iterator != null) {
                 if (iterator.hasNext())
-                return docs.next().getDouble("value");
+                return iterator.next().getDouble("value");
             }
         }       
         return null;
@@ -214,7 +214,7 @@ public class MongoConnector {
             MongoCursor<Document> iterator = docs.iterator();
             if (iterator != null) {
                 if (iterator.hasNext())
-                return docs.next().getDouble("value");
+                return iterator.next().getDouble("value");
             }
         }       
         return null;
