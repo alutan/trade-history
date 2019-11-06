@@ -196,6 +196,7 @@ public class MongoConnector {
         // return result;
         logger.info("Total Notional docs: " + docs);
         if (docs != null) {
+            logger.info("docs: " + docs);
             MongoCursor<Document> iterator = docs.iterator();
             logger.info("iterator: " + iterator);
             if (iterator != null) {
@@ -214,6 +215,7 @@ public class MongoConnector {
                                                         .filter(Filters.eq("owner", ownerName));
         logger.info("Commission Total docs: " + docs);
         if (docs != null) {
+            logger.info("docs: " + docs);
             MongoCursor<Document> iterator = docs.iterator();
             logger.info("iterator: " + iterator);
             if (iterator != null) {
