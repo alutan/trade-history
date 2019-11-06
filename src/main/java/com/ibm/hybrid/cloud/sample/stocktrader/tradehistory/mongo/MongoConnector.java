@@ -196,16 +196,14 @@ public class MongoConnector {
         // return result;
         logger.info("Total Notional docs: " + docs);
         if (docs != null) {
-            logger.info("docs: " + docs);
-            MongoCursor<Document> iterator = docs.iterator();
-            logger.info("iterator: " + iterator);
-            if (iterator != null) {
-                logger.info("iterator has next: " + iterator.hasNext());
-                if (iterator.hasNext()) {
-                    return iterator.next().getDouble("value");
-                }
+            try {
+                Document doc = docs.first();
+                logger.info("doc: " + doc);
+               return doc.getDouble("value");
+            } catch (Exception e) {
+                logException(e);
             }
-        }       
+        }
         return null;
     }
 
@@ -215,14 +213,12 @@ public class MongoConnector {
                                                         .filter(Filters.eq("owner", ownerName));
         logger.info("Commission Total docs: " + docs);
         if (docs != null) {
-            logger.info("docs: " + docs);
-            MongoCursor<Document> iterator = docs.iterator();
-            logger.info("iterator: " + iterator);
-            if (iterator != null) {
-                logger.info("iterator has next: " + iterator.hasNext());
-                if (iterator.hasNext()) {
-                    return iterator.next().getDouble("value");
-                }
+            try {
+                Document doc = docs.first();
+                logger.info("doc: " + doc);
+                return doc.getDouble("value");
+            } catch (Exception e) {
+                logException(e);
             }
         }
         return null;
