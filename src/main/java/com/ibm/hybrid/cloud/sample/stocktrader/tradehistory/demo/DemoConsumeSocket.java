@@ -215,14 +215,15 @@ public class DemoConsumeSocket {
         @Override
         public void run() {
             while (!exit) {
-                logger.debug("Consuming messages from Kafka");
+                logger.info("Consuming messages from Kafka");
                 ConsumerRecords<String, String> records = consumer.consume();
-                logger.debug("Processing records");
+                logger.info("Processing records: " + records);
                 for (ConsumerRecord<String, String> record : records) {
                     DemoConsumedMessage message = new DemoConsumedMessage(record.topic(), record.partition(),
                             record.offset(), record.value(), record.timestamp());
                     
                     StockPurchase sp = new StockPurchase(message.getValue());
+                    logger.info("Inserting stock purchase history to Mongo DB");
                     MONGO_CONNECTOR.insertStockPurchase(sp, message.getTopic());
                     try {
                         logger.debug(String.format("Consumed message %s",message.encode()));
