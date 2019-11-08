@@ -76,16 +76,16 @@ public class DemoConsumeSocket {
             switch (action) {
             case "start":
                 if (messageController == null) {
-                    logger.debug("Starting message consumption");
+                    logger.info("Starting message consumption");
                     messageController = new MessageController();
                     messageController.start();
                 } else {
-                    logger.debug("Resuming message consumption");
+                    logger.info("Resuming message consumption");
                     messageController.resume();
                 }
                 break;
             case "stop":
-                logger.debug("Pausing message consumption");
+                logger.info("Pausing message consumption");
                 messageController.pause();
                 break;
             default:
