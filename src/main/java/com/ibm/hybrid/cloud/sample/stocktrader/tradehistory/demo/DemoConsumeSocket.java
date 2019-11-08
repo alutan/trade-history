@@ -164,11 +164,11 @@ public class DemoConsumeSocket {
                 while (!exit) {
                     int messagesSent = 0;
                     while (!exit && sendMessages) {
-                        logger.debug("Sending / waiting for messages, queue depth : " + messageQueue.size());
+                        logger.info("Sending / waiting for messages, queue depth : " + messageQueue.size());
                         try {
                             DemoConsumedMessage message = messageQueue.poll(1, TimeUnit.SECONDS);
                             if (message != null) {
-                                logger.debug(String.format("Updating session %s with new message %s",
+                                logger.info(String.format("Updating session %s with new message %s",
                                         currentSession.getId(), message.encode()));
                                 currentSession.getBasicRemote().sendObject(message);
                                 messagesSent++;
@@ -179,7 +179,7 @@ public class DemoConsumeSocket {
                     }
                     sendMessages = false;
                     Thread.sleep(1000);
-                    logger.debug(String.format("Paused consumer for session %s.", currentSession.getId()));
+                    logger.info(String.format("Paused consumer for session %s.", currentSession.getId()));
                 }
             }catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -226,16 +226,16 @@ public class DemoConsumeSocket {
                     logger.info("Inserting stock purchase history to Mongo DB");
                     MONGO_CONNECTOR.insertStockPurchase(sp, message.getTopic());
                     try {
-                        logger.debug(String.format("Consumed message %s",message.encode()));
+                        logger.info(String.format("Consumed message %s",message.encode()));
                         while (!exit && !messageQueue.offer(message, 1, TimeUnit.SECONDS));
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
                 }
             }
-            logger.debug("Closing consumer");
+            logger.info("Closing Kafka consumer");
             consumer.shutdown();
-            logger.debug("Consumer closed");
+            logger.info("Kafka consumer closed");
         }
 
     }
