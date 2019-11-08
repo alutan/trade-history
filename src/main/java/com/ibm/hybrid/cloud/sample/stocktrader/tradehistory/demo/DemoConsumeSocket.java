@@ -63,7 +63,7 @@ public class DemoConsumeSocket {
 
     @OnOpen
     public void onOpen(Session session, EndpointConfig endpointConfig) {
-        logger.debug(String.format("Socket opened with id %s", session.getId()));
+        logger.info(String.format("Socket opened with id %s", session.getId()));
         currentSession = session;
     }
 
@@ -72,7 +72,7 @@ public class DemoConsumeSocket {
         try (JsonReader reader = Json.createReader(new StringReader(message))) {
             JsonObject jsonMessage = reader.readObject();
             String action = jsonMessage.getString("action");
-            logger.debug(String.format("Message received from session %s with action %s", session.getId(), action));
+            logger.info(String.format("Message received from session %s with action %s", session.getId(), action));
             switch (action) {
             case "start":
                 if (messageController == null) {
@@ -99,9 +99,9 @@ public class DemoConsumeSocket {
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
-        logger.debug("Closed websocket");
+        logger.info("Closed websocket");
         if (messageController != null) {
-            logger.debug("Stopping message controller");
+            logger.info("Stopping message controller");
             messageController.stop();
         }
         logger.info(String.format("Consumer and client connection for session %s closed.", session.getId()));
