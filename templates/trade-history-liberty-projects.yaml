@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: List
+items:
+- kind: ProjectRequest
+  apiVersion: v1
+  metadata:
+    name: trade-history-liberty-build
+    creationTimestam: null
+  displayName: Trade History on Liberty - Build
+- kind: ProjectRequest
+  apiVersion: v1
+  metadata:
+    name: trade-history-liberty-dev
+    creationTimestam: null
+  displayName: Trade History on Liberty - Dev
+- kind: ProjectRequest
+  apiVersion: v1
+  metadata:
+    name: trade-history-liberty-stage
+    creationTimestam: null
+  displayName: Trade History on Liberty - Stage
+- kind: ProjectRequest
+  apiVersion: v1
+  metadata:
+    name: trade-history-liberty-prod
+    creationTimestam: null
+  displayName: Trade History on Liberty - Prod
